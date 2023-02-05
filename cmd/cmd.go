@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"sops-for-files/app"
+	"github.com/jfxdev/file-to-sops/internal/converter"
 
 	"github.com/spf13/cobra"
 )
 
-var rootCmd = &cobra.Command{
-	Use:   "sopsff",
-	Short: "SOPS for Files",
+var cmd = &cobra.Command{
+	Use:   "fts",
+	Short: "File to SOPs",
 	RunE:  run,
 }
 
@@ -19,11 +19,11 @@ type Flags struct {
 }
 
 func Run() {
-	rootCmd.Flags().StringVarP(&flags.FilePath, "file", "f", "", "required file path")
-	rootCmd.Execute()
+	cmd.Flags().StringVarP(&flags.FilePath, "file", "f", "", "required file path")
+	cmd.Execute()
 }
 
 func run(cmd *cobra.Command, args []string) (err error) {
-	err = app.Single(flags.FilePath)
+	err = converter.Parse(flags.FilePath)
 	return
 }

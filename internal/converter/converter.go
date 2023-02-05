@@ -1,16 +1,15 @@
-package app
+package converter
 
 import (
 	b64 "encoding/base64"
 	"fmt"
 	"io/ioutil"
-	"sops-for-files/app/config"
 	"strings"
 
 	"gopkg.in/yaml.v3"
 )
 
-const secretArtifactName string = "secret.yaml"
+const artifactFile string = "file.yaml"
 
 type Data struct {
 	Metadata Metadata `yaml:"metadata"`
@@ -18,28 +17,24 @@ type Data struct {
 }
 
 type Metadata struct {
-	Path string `yaml:"path"`
+	FileName string `yaml:"file_name"`
 }
 
-func Single(filepath string) error {
-	if filepath == "" {
+func Parse(fileName string) error {
+	if fileName == "" {
 		return fmt.Errorf("a file path must be specified")
 	}
 
-	body, err := ioutil.ReadFile(filepath)
+	body, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		return fmt.Errorf("unable to read file: %v", err.Error())
-	}
-
-	if err := config.Get().Files.Valid(filepath); err != nil {
-		return err
 	}
 
 	encoded := b64.StdEncoding.EncodeToString(body)
 
 	data := Data{
 		Metadata: Metadata{
-			Path: filepath,
+			FileName: fileName,
 		},
 		Content: encoded,
 	}
@@ -49,11 +44,11 @@ func Single(filepath string) error {
 		return err
 	}
 
-	list := strings.Split(filepath, "/")
+	list := strings.Split(fileName, "/")
 	if len(list) > 0 {
 		list = list[:len(list)-1]
 		path := strings.Join(list, "/")
-		err = ioutil.WriteFile(fmt.Sprintf("%s/%s", path, secretArtifactName), content, 0644)
+		err = ioutil.WriteFile(fmt.Sprintf("%s/%s", path, artifactFile), content, 0644)
 		if err != nil {
 			return err
 		}

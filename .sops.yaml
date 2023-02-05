@@ -1,4 +1,0 @@
-creation_rules:
-  - path_regex: '(.*)$'
-    encrypted_regex: '^(content)$'
-    gcp_kms: 'projects/imperial-berm-340117/locations/global/keyRings/sops/cryptoKeys/sops'

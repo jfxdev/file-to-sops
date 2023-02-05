@@ -1,7 +1,7 @@
 package main
 
 import (
-	"sops-for-files/cmd"
+	"github.com/jfxdev/file-to-sops/cmd"
 )
 
 func main() {
