@@ -24,6 +24,6 @@ func Run() {
 }
 
 func run(cmd *cobra.Command, args []string) (err error) {
-	err = converter.Parse(flags.FilePath)
+	err = converter.ToFile(flags.FilePath)
 	return
 }
